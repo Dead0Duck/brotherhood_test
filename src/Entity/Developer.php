@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use InvalidArgumentException;
 use App\Repository\DeveloperRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -60,8 +61,12 @@ class Developer
         return $this->job;
     }
 
+	private $allowedJobs = ['devops', 'programmer', 'admin', 'designer'];
     public function setJob(string $job): static
     {
+		if (!in_array($job, $this->allowedJobs, true))
+			throw new InvalidArgumentException(sprintf('Incorrect job value', $job));
+
         $this->job = $job;
 
         return $this;
